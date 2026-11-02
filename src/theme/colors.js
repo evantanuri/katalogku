@@ -8,4 +8,6 @@ export const COLORS = {
   muted: '#6B7280',
   border: '#D1D5DB',
   danger: '#DC2626',
+  star: '#F59E0B',         // kuning emas rating bintang
 };
+
