@@ -2,17 +2,6 @@ import { Pressable, View, Text, Image, StyleSheet } from 'react-native';
 import { COLORS } from '../theme/colors';
 import Rating from './Rating';
 
-/**
- * Komponen Card Reusable (Modul 3)
- * Props:
- * - title: string (nama produk, dibatasi 2 baris)
- * - price: number | string (harga produk, format angka atau string berformat)
- * - image: string (URL gambar produk)
- * - onPress: function (callback saat kartu ditekan)
- * - discount: string (opsional, misal "-10%" - Latihan 3 WAJIB)
- * - rating: number (opsional, rating 0 - 5 - Latihan 4 TANTANGAN)
- * - category: string (opsional, misal "FASHION", "GROCERIES" sesuai Figma)
- */
 export default function Card({
   title,
   price,
@@ -22,36 +11,19 @@ export default function Card({
   rating,
   category,
 }) {
-  const formatPrice = (val) => {
-    if (typeof val === 'number') {
-      // Jika angka kecil (misal 10 atau 25 pada tes slide 51), tampilkan $ val.
-      // Jika angka ribuan (standar rupiah Indonesia), format Rp X.XXX.
-      return val < 100 ? `$ ${val}` : `Rp ${val.toLocaleString('id-ID')}`;
-    }
-    if (typeof val === 'string') {
-      if (val.startsWith('$') || val.startsWith('Rp')) {
-        return val;
-      }
-      return `Rp ${val}`;
-    }
-    return val;
-  };
+  const displayPrice =
+    typeof price === 'number' ? `Rp ${price.toLocaleString('id-ID')}` : price;
 
   return (
     <Pressable style={styles.card} onPress={onPress}>
       <View style={styles.imageContainer}>
-        <Image
-          source={{ uri: image }}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        <Image source={{ uri: image }} style={styles.image} resizeMode="cover" />
         {discount ? (
           <View style={styles.badge}>
             <Text style={styles.badgeText}>{discount}</Text>
           </View>
         ) : null}
       </View>
-
       <View style={styles.body}>
         {category ? (
           <Text style={styles.category}>{category.toUpperCase()}</Text>
@@ -59,11 +31,9 @@ export default function Card({
         <Text style={styles.title} numberOfLines={2}>
           {title}
         </Text>
-        <View style={styles.footer}>
-          <Text style={styles.price}>{formatPrice(price)}</Text>
-          {rating !== undefined && rating !== null ? (
-            <Rating rating={rating} size={11} />
-          ) : null}
+        <View style={styles.priceRow}>
+          <Text style={styles.price}>{displayPrice}</Text>
+          {rating !== undefined ? <Rating rating={rating} /> : null}
         </View>
       </View>
     </Pressable>
@@ -76,18 +46,19 @@ const styles = StyleSheet.create({
     margin: 6,
     backgroundColor: COLORS.card,
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: COLORS.border,
     overflow: 'hidden',
     elevation: 2, // bayangan Android
-    shadowColor: '#000', // bayangan iOS
-    shadowOpacity: 0.1,
+    shadowColor: '#000',
+    shadowOpacity: 0.08, // bayangan iOS
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 2 },
   },
   imageContainer: {
     width: '100%',
-    aspectRatio: 1,
-    backgroundColor: '#EEEEEE',
-    position: 'relative',
+    aspectRatio: 1.2,
+    backgroundColor: '#EEF2FF',
   },
   image: {
     width: '100%',
@@ -103,8 +74,8 @@ const styles = StyleSheet.create({
     borderRadius: 6,
   },
   badgeText: {
-    color: '#FFFFFF',
-    fontSize: 11,
+    color: '#fff',
+    fontSize: 10,
     fontWeight: 'bold',
   },
   body: {
@@ -118,20 +89,20 @@ const styles = StyleSheet.create({
     marginBottom: 2,
   },
   title: {
-    fontSize: 14,
+    fontSize: 13,
+    fontWeight: '600',
     color: COLORS.text,
-    minHeight: 36,
-    fontWeight: '500',
+    minHeight: 32,
   },
-  footer: {
-    marginTop: 4,
+  priceRow: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+    marginTop: 4,
   },
   price: {
     fontWeight: 'bold',
     color: COLORS.accent,
-    fontSize: 14,
+    fontSize: 13,
   },
 });

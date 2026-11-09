@@ -2,48 +2,25 @@ import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../theme/colors';
 
-/**
- * Komponen Rating Reusable (Modul 3 - Latihan 4 TANTANGAN)
- * Props:
- * - rating: number (nilai rating 0 - 5, misal 4.8)
- * - maxRating: number (jumlah bintang, default 5)
- * - size: number (ukuran ikon bintang, default 14)
- * - showScore: boolean (tampilkan angka rating di samping bintang, default true)
- */
-export default function Rating({
-  rating = 0,
-  maxRating = 5,
-  size = 14,
-  showScore = true,
-}) {
+export default function Rating({ rating = 0 }) {
   const stars = [];
-  const validRating = Math.max(0, Math.min(Number(rating) || 0, maxRating));
+  const fullStars = Math.floor(rating);
 
-  for (let i = 1; i <= maxRating; i++) {
-    let iconName = 'star-outline';
-    if (validRating >= i) {
-      iconName = 'star';
-    } else if (validRating >= i - 0.5) {
-      iconName = 'star-half';
-    }
-
+  for (let i = 1; i <= 5; i++) {
     stars.push(
       <Ionicons
         key={i}
-        name={iconName}
-        size={size}
-        color={COLORS.star}
-        style={styles.starIcon}
+        name={i <= fullStars ? 'star' : 'star-outline'}
+        size={12}
+        color={COLORS.star || '#F59E0B'}
       />
     );
   }
 
   return (
     <View style={styles.container}>
-      <View style={styles.starsRow}>{stars}</View>
-      {showScore && validRating > 0 ? (
-        <Text style={styles.score}>{validRating.toFixed(1)}</Text>
-      ) : null}
+      <View style={styles.stars}>{stars}</View>
+      <Text style={styles.text}>{rating}</Text>
     </View>
   );
 }
@@ -52,19 +29,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     alignItems: 'center',
-    gap: 4,
+    marginTop: 4,
   },
-  starsRow: {
+  stars: {
     flexDirection: 'row',
-    alignItems: 'center',
   },
-  starIcon: {
-    marginRight: 1,
-  },
-  score: {
-    fontSize: 12,
-    fontWeight: '600',
+  text: {
+    fontSize: 11,
     color: COLORS.muted,
-    marginLeft: 3,
+    marginLeft: 4,
   },
 });

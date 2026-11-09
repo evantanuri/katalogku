@@ -1,38 +1,15 @@
 import { Pressable, Text, StyleSheet } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
 import { COLORS } from '../theme/colors';
 
-/**
- * Komponen Button Reusable (Modul 3)
- * Props:
- * - title: string (label tombol)
- * - onPress: function (callback saat ditekan)
- * - variant: 'primary' (default) | 'outline' | 'danger' (Latihan 1 WAJIB)
- * - disabled: boolean (opsional, nonaktifkan tombol)
- * - icon: string (opsional, nama ikon Ionicons di sebelah kiri label)
- */
+// variant: 'primary' (latar biru), 'outline' (garis tepi), atau 'danger' (aksi hapus)
 export default function Button({
   title,
   onPress,
   variant = 'primary',
   disabled = false,
-  icon,
 }) {
-  const isOutline = variant === 'outline';
-  const isDanger = variant === 'danger';
-
-  const getVariantStyle = () => {
-    if (isOutline) return styles.outline;
-    if (isDanger) return styles.danger;
-    return styles.primary;
-  };
-
-  const getTextStyle = () => {
-    if (isOutline) return styles.textOutline;
-    return styles.text;
-  };
-
-  const iconColor = isOutline ? COLORS.primary : '#FFFFFF';
+  const outline = variant === 'outline';
+  const danger = variant === 'danger';
 
   return (
     <Pressable
@@ -40,19 +17,11 @@ export default function Button({
       disabled={disabled}
       style={({ pressed }) => [
         styles.base,
-        getVariantStyle(),
+        outline ? styles.outline : danger ? styles.danger : styles.primary,
         (pressed || disabled) && styles.dim,
       ]}
     >
-      {icon ? (
-        <Ionicons
-          name={icon}
-          size={18}
-          color={iconColor}
-          style={styles.icon}
-        />
-      ) : null}
-      <Text style={[styles.text, getTextStyle()]}>
+      <Text style={[styles.text, outline && styles.textOutline]}>
         {title}
       </Text>
     </Pressable>
@@ -65,8 +34,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     borderRadius: 10,
     alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'row',
   },
   primary: {
     backgroundColor: COLORS.primary,
@@ -74,7 +41,6 @@ const styles = StyleSheet.create({
   outline: {
     borderWidth: 1.5,
     borderColor: COLORS.primary,
-    backgroundColor: 'transparent',
   },
   danger: {
     backgroundColor: COLORS.danger,
@@ -82,11 +48,8 @@ const styles = StyleSheet.create({
   dim: {
     opacity: 0.5,
   },
-  icon: {
-    marginRight: 8,
-  },
   text: {
-    color: '#FFFFFF',
+    color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
   },
